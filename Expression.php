@@ -21,12 +21,30 @@
 				$this->_valid = FALSE ;
 			}
 
-			if(!empty($this->_typeExpression)){
+			if($this->_valid){
 				$this->_target = strstr($expressionIn, $this->_typeExpression, TRUE) ;
 				$this->_expression = strstr($expressionIn, $this->_target.$this->_typeExpression) ;
 			} else{
 				$this->_target = '' ;
 				$this->_expression = '' ;
+			}
+
+			/* vérifier validité expression */
+			switch($this->_typeExpression){
+				case '##' :
+					require_once('Regex.php') ;
+					$this->_expression = new \UnbutterflyPHP\Regex($this->_expression) ;
+					break ;
+				case '->' :
+					require_once('Scaling.php') ;
+					$this->_expression = new \UnbutterflyPHP\Scaling($this->_expression) ;
+					break ;
+				case '\'' :
+					require_once('Arithmetic.php') ;
+					$this->_expression = new \UnbutterflyPHP\Arithmetic($this->_expression) ;
+					break ;
+				default :
+					break ;
 			}
 		}
 
